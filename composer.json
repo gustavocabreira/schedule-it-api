@@ -13,7 +13,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.14",
         "laravel/tinker": "^2.10.1",
-        "meilisearch/meilisearch-php": "^1.14"
+        "meilisearch/meilisearch-php": "^1.14",
+        "nunomaduro/essentials": "@dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
