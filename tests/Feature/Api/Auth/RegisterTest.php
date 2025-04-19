@@ -2,8 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Jobs\SendWelcomeNotificationJob;
 use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Queue;
+
+beforeEach(function () {
+    Queue::fake();
+});
 
 it('should be able to register a user', function () {
     $payload = [
@@ -112,4 +118,17 @@ it('should return a 422 error when the name is not valid', function () {
             ],
         ],
     ]);
+});
+
+it('should dispatch a SendWelcomeNotificationJob', function () {
+    $payload = [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'P@ssw0rd',
+        'password_confirmation' => 'P@ssw0rd',
+    ];
+
+    $this->postJson(route('api.auth.register'), $payload);
+
+    Queue::assertPushed(SendWelcomeNotificationJob::class);
 });
