@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Actions\Notifications\WelcomeNotificationAction;
 use App\Jobs\SendWelcomeNotificationJob;
 use App\Models\User;
+use App\Notifications\WelcomeNotification;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
@@ -131,4 +134,15 @@ it('should dispatch a SendWelcomeNotificationJob', function () {
     $this->postJson(route('api.auth.register'), $payload);
 
     Queue::assertPushed(SendWelcomeNotificationJob::class);
+});
+
+it('should send a notification to the user', function () {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    $action = new WelcomeNotificationAction();
+    $action->execute($user);
+
+    Notification::assertSentTo($user, WelcomeNotification::class);
 });
