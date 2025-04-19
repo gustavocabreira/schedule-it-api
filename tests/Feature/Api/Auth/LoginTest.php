@@ -20,3 +20,17 @@ it('should be able to login a user', function () {
         'access_token',
     ]);
 });
+
+it('should return a 401 error when the credentials are invalid', function () {
+    $payload = [
+        'email' => 'not valid',
+        'password' => 'password',
+    ];
+
+    $response = $this->postJson(route('api.auth.login'), $payload);
+
+    $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+    $response->assertJson([
+        'message' => 'Invalid credentials',
+    ]);
+});
