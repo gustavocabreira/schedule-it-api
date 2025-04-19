@@ -6,23 +6,26 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "8.4",
+        "php": "^8.4",
         "http-interop/http-factory-guzzle": "^1.2",
         "laravel/framework": "^12.0",
+        "laravel/horizon": "^5.31",
         "laravel/octane": "^2.9",
+        "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.14",
         "laravel/tinker": "^2.10.1",
-        "meilisearch/meilisearch-php": "^1.14"
+        "meilisearch/meilisearch-php": "^1.14",
+        "nunomaduro/essentials": "@dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.0",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^11.5.3"
+        "pestphp/pest": "^3.8"
     },
     "autoload": {
         "psr-4": {
@@ -59,8 +62,8 @@
         "test": [
             "@php artisan config:clear --ansi",
             "./vendor/bin/pint --test",
-            "./vendor/bin/phpstan analyse -l max app tests",
-            "@php artisan test"
+            "./vendor/bin/phpstan analyse -l max app --memory-limit=2G",
+            "./vendor/bin/pest"
         ]
     },
     "extra": {
