@@ -16,6 +16,9 @@ use Illuminate\Http\Response;
 
 final class AuthController extends Controller
 {
+    /**
+     * Register a new user
+     */
     public function register(RegisterUserRequest $request, RegisterUserAction $action): JsonResponse
     {
         $user = $action->execute(RegisterUserDTO::fromRequest($request));
@@ -23,6 +26,9 @@ final class AuthController extends Controller
         return response()->json($user, Response::HTTP_CREATED);
     }
 
+    /**
+     * Login a user
+     */
     public function login(LoginUserRequest $request, LoginUserAction $action): JsonResponse
     {
         $token = $action->execute(LoginUserDTO::fromRequest($request));
