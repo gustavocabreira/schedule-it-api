@@ -23,7 +23,7 @@ final class AuthController extends Controller
     {
         $user = $action->execute(RegisterUserDTO::fromRequest($request));
 
-        return response()->json($user, Response::HTTP_CREATED);
+        return response()->json($user->toResource(), Response::HTTP_CREATED);
     }
 
     /**
