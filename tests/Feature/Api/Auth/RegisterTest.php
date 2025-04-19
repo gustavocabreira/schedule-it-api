@@ -93,3 +93,23 @@ it('should return a 422 error when the email is not valid', function () {
         ],
     ]);
 });
+
+it('should return a 422 error when the name is not valid', function () {
+    $payload = [
+        'name' => null,
+        'email' => 'test@example.com',
+        'password' => 'P@ssw0rd',
+        'password_confirmation' => 'P@ssw0rd',
+    ];
+
+    $response = $this->postJson(route('api.auth.register'), $payload);
+
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    $response->assertJson([
+        'errors' => [
+            'name' => [
+                'The name field is required.',
+            ],
+        ],
+    ]);
+});
