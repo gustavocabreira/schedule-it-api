@@ -61,7 +61,7 @@
         "test": [
             "@php artisan config:clear --ansi",
             "./vendor/bin/pint --test",
-            "./vendor/bin/phpstan analyse -l max app",
+            "./vendor/bin/phpstan analyse -l max app --memory-limit=2G",
             "./vendor/bin/pest"
         ]
     },
