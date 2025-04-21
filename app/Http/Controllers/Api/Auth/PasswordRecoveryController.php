@@ -16,7 +16,7 @@ final class PasswordRecoveryController extends Controller
         $user = request()->user();
 
         if (! $user instanceof \App\Models\User) {
-            throw new Exception('User not found');
+            throw new Exception('Unauthorized.', Response::HTTP_UNAUTHORIZED);
         }
 
         $id = $user->id;
