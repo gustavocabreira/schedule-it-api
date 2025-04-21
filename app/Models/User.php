@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -43,6 +44,14 @@ final class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * @return HasMany<PasswordRecoveryToken, $this>
+     */
+    public function passwordRecoveryTokens(): HasMany
+    {
+        return $this->hasMany(PasswordRecoveryToken::class);
+    }
 
     /**
      * Get the attributes that should be cast.
