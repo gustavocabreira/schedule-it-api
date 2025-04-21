@@ -118,3 +118,41 @@ it('should update the user password', function () {
 
     expect(Hash::check('P@ssw0rd', $user->password))->toBeTrue();
 });
+
+it('should return 422 when providing weak password', function () {
+    $user = User::factory()->create();
+
+    $id = $user->id;
+    $email = $user->email;
+    $now = now()->timestamp;
+
+    $decryptedToken = sprintf('%s:%s:%s', $id, $email, $now);
+    $encryptedToken = encrypt($decryptedToken);
+
+    $passwordRecoveryToken = PasswordRecoveryToken::create([
+        'user_id' => $user->id,
+        'token' => $encryptedToken,
+        'expires_at' => now()->addMinutes(5),
+    ]);
+
+    $payload = [
+        'password' => 'pass',
+        'password_confirmation' => 'pass',
+    ];
+
+    $response = $this->postJson(route('api.auth.password-recovery.update-password', [
+        'passwordRecoveryToken' => $passwordRecoveryToken->token,
+    ]), $payload);
+
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    $response->assertJson([
+        'errors' => [
+            'password' => [
+                'The password field must be at least 8 characters.',
+                'The password field must contain at least one uppercase and one lowercase letter.',
+                'The password field must contain at least one symbol.',
+                'The password field must contain at least one number.',
+            ],
+        ],
+    ]);
+});
