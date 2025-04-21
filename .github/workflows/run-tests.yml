@@ -23,7 +23,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: sh install.sh --app-name=laravel --no-interaction
+        run: sh docker/local/install.sh --app-name=laravel --no-interaction
 
       - name: Run tests
         run: docker compose exec -it laravel composer test
