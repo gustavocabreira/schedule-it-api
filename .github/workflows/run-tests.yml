@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
+      - name: Generate .env
+        run: cp .env.example .env
+        
       - name: Generate key
         run: php artisan key:generate
 
