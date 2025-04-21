@@ -5,18 +5,24 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use Exception;
+use App\Http\Requests\Api\Auth\PasswordRecoveryRequest;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 final class PasswordRecoveryController extends Controller
 {
-    public function generateToken(): JsonResponse
+    public function generateToken(PasswordRecoveryRequest $request): JsonResponse
     {
-        $user = request()->user();
+        /** @var User|null $user */
+        $user = User::query()
+            ->where('email', $request->string('email'))
+            ->first();
 
-        if (! $user instanceof \App\Models\User) {
-            throw new Exception('Unauthorized.', Response::HTTP_UNAUTHORIZED);
+        if (is_null($user)) {
+            return response()->json([
+                'message' => 'An email with a password recovery link has been sent to your email address.',
+            ], Response::HTTP_CREATED);
         }
 
         $id = $user->id;
