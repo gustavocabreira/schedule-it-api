@@ -14,6 +14,7 @@ Route::name('api.')->group(function () {
         });
 
         Route::post('password-recovery/token', [PasswordRecoveryController::class, 'generateToken'])->name('password-recovery.generate-token');
-        Route::post('password-recovery/{token}', [PasswordRecoveryController::class, 'checkToken'])->name('password-recovery.check-token');
+        Route::get('password-recovery/{passwordRecoveryToken:token}', [PasswordRecoveryController::class, 'checkToken'])->name('password-recovery.check-token');
+        Route::post('password-recovery/{passwordRecoveryToken:token}/update-password', [PasswordRecoveryController::class, 'updatePassword'])->name('password-recovery.update-password');
     });
 });
