@@ -23,13 +23,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
-
-      - name: Generate .env
-        run: cp .env.example .env
-        
-      - name: Generate key
-        run: php artisan key:generate
+        run: sh install.sh --app-name=laravel --no-interaction
 
       - name: Run tests
-        run: composer test
+        run: docker compose exec -it laravel composer test
