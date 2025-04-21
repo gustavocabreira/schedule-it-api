@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('password_recovery_tokens', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->string('token');
+            $table->longText('token');
             $table->boolean('is_revoked')->default(false);
             $table->datetime('expires_at');
             $table->timestamps();

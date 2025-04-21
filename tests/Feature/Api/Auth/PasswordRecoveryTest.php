@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use App\Notifications\PasswordRecoveryTokenNotification;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Notification;
 
 it('should generate a password recovery token', function () {
     $user = User::factory()->create();
@@ -29,4 +31,18 @@ it('should not generate a password recovery token if the email is not found', fu
     $response->assertStatus(Response::HTTP_CREATED);
 
     $this->assertDatabaseCount('password_recovery_tokens', 0);
+});
+
+it('should send an email with a password recovery link', function () {
+    Notification::fake();
+    $user = User::factory()->create();
+    $payload = [
+        'email' => $user->email,
+    ];
+
+    $this->postJson(route('api.auth.password-recovery.generate-token'), $payload);
+
+    Notification::assertSentTo($user, PasswordRecoveryTokenNotification::class, function ($notification) {
+        return $notification->token !== null;
+    });
 });

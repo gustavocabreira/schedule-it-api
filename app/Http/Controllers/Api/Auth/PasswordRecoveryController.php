@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\PasswordRecoveryRequest;
 use App\Models\User;
+use App\Notifications\PasswordRecoveryTokenNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -36,6 +37,10 @@ final class PasswordRecoveryController extends Controller
             'token' => $encryptedToken,
             'expires_at' => now()->addMinutes(5),
         ]);
+
+        $user->notify(new PasswordRecoveryTokenNotification(
+            token: $encryptedToken,
+        ));
 
         return response()->json([
             'message' => 'An email with a password recovery link has been sent to your email address.',
