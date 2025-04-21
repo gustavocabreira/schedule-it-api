@@ -34,7 +34,7 @@ final class PasswordRecoveryTokenNotification extends Notification implements Sh
     public function toMail(object $notifiable): MailMessage
     {
         $url = route('api.auth.password-recovery.check-token', [
-            'token' => $this->token,
+            'passwordRecoveryToken' => $this->token,
         ], true);
 
         return (new MailMessage)
